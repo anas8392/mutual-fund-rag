@@ -76,3 +76,28 @@ This repository is configured natively for serverless deployment on **Vercel** w
 2. Click **Add New Project** and import your `mutual-fund-rag` repository.
 3. Open the **Environment Variables** tab and add your generated `GROQ_API_KEY`.
 4. Leave the Framework Preset as `Other` and click **Deploy**. Vercel will automatically parse `vercel.json`, serve your vanilla frontend globally via Edge Network, and boot your Python FastAPI onto their Serverless instances!
+
+---
+
+## 📚 Source List
+The application leverages the following data sources and technologies:
+- **Financial Data Source:** Dynamically scraped from [Indmoney Mutual Funds](https://www.indmoney.com/mutual-funds)
+- **Vector Embeddings Models:** Generated via `fastembed` using `sentence-transformers/all-MiniLM-L6-v2`
+- **Vector Database:** Local `FAISS` index (Facebook AI Similarity Search)
+- **Large Language Model:** Powered via `Groq` using the `llama-3.1-8b-instant` model
+- **Frameworks:** `FastAPI` (Backend), `Playwright` & `BeautifulSoup` (Scraping), Vanilla HTML/CSS/JS (Frontend)
+
+---
+
+## 💬 Sample Q&A
+
+**User:** *What is the exit load of HDFC flexi cap fund?*
+**MF Advisor:** The Exit load for HDFC Flexi Cap Fund Direct Plan Growth Option is 1.0%.
+*Source URL: [https://www.indmoney.com/mutual-funds/hdfc-flexi-cap-fund-direct-plan-growth-option-3184](https://www.indmoney.com/mutual-funds/hdfc-flexi-cap-fund-direct-plan-growth-option-3184)*
+
+**User:** *What is the phone number of the CEO?*
+**MF Advisor:** I'm sorry, but as a mutual fund advisor, I cannot provide personal information. I can only assist with questions related to mutual funds.
+
+**User:** *Which mutual fund has the lowest expense ratio?*
+**MF Advisor:** Based on the context provided, the fund with the lowest expense ratio is the ICICI Prudential Liquid Fund Direct Plan Growth at 0.09%.
+*Source URL: [https://www.indmoney.com/mutual-funds/icici-prudential-liquid-fund-direct-plan-growth](https://www.indmoney.com/mutual-funds/icici-prudential-liquid-fund-direct-plan-growth)*
