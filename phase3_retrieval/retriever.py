@@ -2,7 +2,7 @@ import faiss
 import pickle
 import numpy as np
 import os
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 class FundRetriever:
     def __init__(self, index_dir="../phase2_knowledge_base"):
@@ -18,9 +18,10 @@ class FundRetriever:
         with open(self.meta_path, "rb") as f:
             self.metadata = pickle.load(f)
             
-        print("Initializing embedding model (all-MiniLM-L6-v2)...")
+        print("Initializing FastEmbed model (all-MiniLM-L6-v2)...")
         # Initialize embedding model once to prevent high latency during chat
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        # FastEmbed is lightweight and downloads weights locally.
+        self.model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=os.environ.get("VERCEL_TMP_CACHE", None))
         
     def retrieve(self, query: str, top_k: int = 2) -> list:
         """
@@ -28,7 +29,10 @@ class FundRetriever:
         Returns a list of dictionaries with content and source paths.
         """
         # Encode the query
-        query_vector = self.model.encode([query], convert_to_numpy=True)
+        # FastEmbed yields an array sequence, so extract the first one
+        query_vector = np.array(list(self.model.embed([query]))[0])
+        # FAISS normalization expects a 2D array: (1, vector_dimension)
+        query_vector = np.expand_dims(query_vector, axis=0)
         faiss.normalize_L2(query_vector)
         
         # Perform inner product (cosine) search

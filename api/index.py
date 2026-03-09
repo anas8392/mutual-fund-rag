@@ -7,6 +7,7 @@ import sys
 if os.getenv("VERCEL") == "1":
     os.environ["HF_HOME"] = "/tmp"
     os.environ["TRANSFORMERS_CACHE"] = "/tmp"
+    os.environ["VERCEL_TMP_CACHE"] = "/tmp"
 
 # Prepend the project root to sys.path so dynamic module imports succeed on Vercel
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))

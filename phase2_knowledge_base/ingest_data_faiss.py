@@ -3,7 +3,7 @@ import numpy as np
 import faiss
 import pickle
 import os
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 def ingest_data():
     csv_path = "../phase1_data_acquisition/mutual_fund_data.csv"
@@ -13,9 +13,9 @@ def ingest_data():
 
     df = pd.read_csv(csv_path)
     
-    # Initialize the Embedding Model
-    print("Loading SentenceTransformer model 'all-MiniLM-L6-v2'...")
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    # Initialize the FastEmbed Embedding Model (Downloads to /tmp if serverless)
+    print("Loading FastEmbed model 'sentence-transformers/all-MiniLM-L6-v2'...")
+    model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=os.environ.get("VERCEL_TMP_CACHE", None))
     
     # Prepare documents and metadata
     documents = []
@@ -49,9 +49,9 @@ def ingest_data():
         }
         metadatas.append(metadata)
 
-    # Generate Embeddings
-    print(f"Generating embeddings for {len(documents)} records...")
-    embeddings = model.encode(documents, convert_to_numpy=True)
+    # Generate Embeddings using FastEmbed (yields generator, converted to numpy array stack)
+    print(f"Generating embeddings for {len(documents)} records using FastEmbed...")
+    embeddings = np.vstack(list(model.embed(documents)))
     
     # Normalize embeddings for cosine similarity
     faiss.normalize_L2(embeddings)
