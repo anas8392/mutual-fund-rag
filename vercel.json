@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "phase*/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/phase6_frontend/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/phase6_frontend/index.html"
+    }
+  ]
+}

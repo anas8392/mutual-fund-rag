@@ -67,3 +67,12 @@ When deployed to GitHub, the workflow safely spins up an ephemeral runner every 
 3. Automatically Git Commits and Pushes the new index files straight back to your master branch. 
 
 *Zero manual intervention required.*
+
+---
+
+## ☁️ Setting up Vercel Deployment
+This repository is configured natively for serverless deployment on **Vercel** with a dedicated lightweight PyTorch environment overriding to prevent 250MB size failures.
+1. Sign up for [Vercel](https://vercel.com/) and link your GitHub account.
+2. Click **Add New Project** and import your `mutual-fund-rag` repository.
+3. Open the **Environment Variables** tab and add your generated `GROQ_API_KEY`.
+4. Leave the Framework Preset as `Other` and click **Deploy**. Vercel will automatically parse `vercel.json`, serve your vanilla frontend globally via Edge Network, and boot your Python FastAPI onto their Serverless instances!
