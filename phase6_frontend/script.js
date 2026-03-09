@@ -12,16 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const bubble = document.createElement("div");
         bubble.className = "message-bubble " + (sender === "user" ? "msg-user" : "msg-bot");
-        
+
         // Basic Markdown/URL parsing for the Bot response
         if (sender === "bot") {
             // Find Source URL string and convert to styled linking button
             const sourceRegex = /Source URL:\s*(https?:\/\/[^\s]+)/gi;
             let formattedText = text.replace(sourceRegex, "<br><a href='$1' target='_blank' class='source-link'>↗ View Data Source on Indmoney</a>");
-            
+
             // Allow basic line breaks
             formattedText = formattedText.replace(/\n/g, "<br>");
-            
+
             // Clean up Markdown asterisks
             formattedText = formattedText.replace(/\*\*/g, "");
 
@@ -31,12 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         chatWindow.appendChild(bubble);
-        
+
         // Scroll to bottom with slight delay for dynamic size
         setTimeout(() => {
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }, 50);
-        
+
         return bubble;
     }
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Clear input early
         inputField.value = "";
-        
+
         // Render User Query
         appendMessage("user", query);
 
@@ -65,12 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             const data = await response.json();
-            
+
             // Remove loading bubble
             chatWindow.removeChild(loadingBubble);
-            
+
             // Render LLM Generation
-            if(data.answer) {
+            if (data.answer) {
                 appendMessage("bot", data.answer);
             } else {
                 appendMessage("bot", "Error: Unrecognized response from server.");
@@ -83,9 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Sample Q&A Handlers
+    const qaChips = document.querySelectorAll(".sample-qa-chip");
+    qaChips.forEach(chip => {
+        chip.addEventListener("click", () => {
+            inputField.value = chip.textContent;
+            sendMessage();
+        });
+    });
+
     // Event Listeners
     sendBtn.addEventListener("click", sendMessage);
-    
+
     inputField.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             e.preventDefault();

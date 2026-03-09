@@ -2,7 +2,12 @@ import faiss
 import pickle
 import numpy as np
 import os
-from fastembed import TextEmbedding
+try:
+    from fastembed import TextEmbedding
+    USE_FASTEMBED = True
+except ImportError:
+    from sentence_transformers import SentenceTransformer
+    USE_FASTEMBED = False
 
 class FundRetriever:
     def __init__(self, index_dir="../phase2_knowledge_base"):
@@ -18,10 +23,11 @@ class FundRetriever:
         with open(self.meta_path, "rb") as f:
             self.metadata = pickle.load(f)
             
-        print("Initializing FastEmbed model (all-MiniLM-L6-v2)...")
-        # Initialize embedding model once to prevent high latency during chat
-        # FastEmbed is lightweight and downloads weights locally.
-        self.model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=os.environ.get("VERCEL_TMP_CACHE", None))
+        print(f"Initializing embedding model (all-MiniLM-L6-v2) | FastEmbed: {USE_FASTEMBED}...")
+        if USE_FASTEMBED:
+            self.model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=os.environ.get("VERCEL_TMP_CACHE", None))
+        else:
+            self.model = SentenceTransformer("all-MiniLM-L6-v2")
         
     def retrieve(self, query: str, top_k: int = 2) -> list:
         """
@@ -29,8 +35,12 @@ class FundRetriever:
         Returns a list of dictionaries with content and source paths.
         """
         # Encode the query
-        # FastEmbed yields an array sequence, so extract the first one
-        query_vector = np.array(list(self.model.embed([query]))[0])
+        if USE_FASTEMBED:
+            # FastEmbed yields an array sequence, so extract the first one
+            query_vector = np.array(list(self.model.embed([query]))[0])
+        else:
+            query_vector = self.model.encode(query)
+            
         # FAISS normalization expects a 2D array: (1, vector_dimension)
         query_vector = np.expand_dims(query_vector, axis=0)
         faiss.normalize_L2(query_vector)

@@ -3,7 +3,12 @@ import numpy as np
 import faiss
 import pickle
 import os
-from fastembed import TextEmbedding
+try:
+    from fastembed import TextEmbedding
+    USE_FASTEMBED = True
+except ImportError:
+    from sentence_transformers import SentenceTransformer
+    USE_FASTEMBED = False
 
 def ingest_data():
     csv_path = "../phase1_data_acquisition/mutual_fund_data.csv"
@@ -13,9 +18,12 @@ def ingest_data():
 
     df = pd.read_csv(csv_path)
     
-    # Initialize the FastEmbed Embedding Model (Downloads to /tmp if serverless)
-    print("Loading FastEmbed model 'sentence-transformers/all-MiniLM-L6-v2'...")
-    model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=os.environ.get("VERCEL_TMP_CACHE", None))
+    # Initialize Embedding Model 
+    print(f"Loading embedding model 'sentence-transformers/all-MiniLM-L6-v2' (FastEmbed={USE_FASTEMBED})...")
+    if USE_FASTEMBED:
+        model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=os.environ.get("VERCEL_TMP_CACHE", None))
+    else:
+        model = SentenceTransformer("all-MiniLM-L6-v2")
     
     # Prepare documents and metadata
     documents = []
@@ -49,9 +57,12 @@ def ingest_data():
         }
         metadatas.append(metadata)
 
-    # Generate Embeddings using FastEmbed (yields generator, converted to numpy array stack)
-    print(f"Generating embeddings for {len(documents)} records using FastEmbed...")
-    embeddings = np.vstack(list(model.embed(documents)))
+    # Generate Embeddings
+    print(f"Generating embeddings for {len(documents)} records...")
+    if USE_FASTEMBED:
+        embeddings = np.vstack(list(model.embed(documents)))
+    else:
+        embeddings = model.encode(documents)
     
     # Normalize embeddings for cosine similarity
     faiss.normalize_L2(embeddings)
