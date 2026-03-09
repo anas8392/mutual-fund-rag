@@ -63,6 +63,8 @@ def ingest_data():
         embeddings = np.vstack(list(model.embed(documents)))
     else:
         embeddings = model.encode(documents)
+        
+    embeddings = np.array(embeddings).astype(np.float32)
     
     # Normalize embeddings for cosine similarity
     faiss.normalize_L2(embeddings)

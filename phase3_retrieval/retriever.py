@@ -41,8 +41,8 @@ class FundRetriever:
         else:
             query_vector = self.model.encode(query)
             
-        # FAISS normalization expects a 2D array: (1, vector_dimension)
-        query_vector = np.expand_dims(query_vector, axis=0)
+        # FAISS normalization expects a 2D array: (1, vector_dimension) of type float32
+        query_vector = np.expand_dims(query_vector, axis=0).astype(np.float32)
         faiss.normalize_L2(query_vector)
         
         # Perform inner product (cosine) search
