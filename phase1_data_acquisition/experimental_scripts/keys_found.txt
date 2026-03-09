@@ -1,0 +1,29 @@
+data.nav
+data.nav_text
+data.nav_date
+data.ctas[0].nav_link
+data.ctas[0].app_store_navlink
+data.risk_meter
+data.risk_meter.widget_template_name
+data.risk_meter.widget_properties
+data.risk_meter.widget_properties.body
+data.risk_meter.widget_properties.meter_block
+data.risk_meter.widget_properties.meter_block.aspect_ratio
+data.risk_meter.widget_properties.meter_block.png
+data.risk_meter.widget_properties.meter_block.svg
+data.risk_meter.widget_properties.meter_score
+data.risk_meter.widget_properties.meter_score.degree
+data.risk_meter.widget_properties.pointer
+data.risk_meter.widget_properties.pointer.aspect_ratio
+data.risk_meter.widget_properties.pointer.svg
+data.risk_meter.widget_properties.title
+data.risk_meter.widget_properties.zone_color
+data.risk_meter.widget_properties.zone_title
+data.risk_meter.tab
+
+VALUES FOUND:
+VALUE: data.nav = ₹2181.73
+VALUE: data.nav_text = Latest NAV for HDFC Flexi Cap Fund as of 06 Mar 2026 is ₹2181.73
+VALUE: data.nav_date = 06 Mar 2026
+VALUE: data.ctas[0].nav_link = https://www.indmoney.com/mf/explore/lumpsum?fund_id=3184&order_type=1&txn_type=P
+VALUE: data.ctas[0].app_store_navlink = https://indmoney.onelink.me/MgHh/eec5h5n1

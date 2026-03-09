@@ -1,0 +1,63 @@
+# Mutual Fund RAG Chatbot Architecture
+
+This document outlines the phase-wise architecture for building a Retrieval-Augmented Generation (RAG) chatbot focused on Mutual Funds, utilizing data scraped from Indmoney.
+
+## User Review Required
+> [!IMPORTANT]
+> Please review the expanded architecture phases below, which now include the Frontend/Backend separation and the Automated Scheduler. If this final architecture aligns with your vision, we will proceed with **Phase 1** which focuses specifically on scraping mutual fund scheme data from `indmoney.com`. I will need to know if you have a preference for the programming language and libraries we use for Phase 1 (e.g., Python using requests/BeautifulSoup, or Playwright for dynamic content).
+
+## Phase-wise Architecture
+
+### Phase 1: Data Acquisition & Preprocessing (Active Phase)
+Since we need custom data from Indmoney, the first step is building a data ingestion pipeline.
+- **Data Source:** `https://www.indmoney.com/mutual-funds`
+- **Scraping Strategy:** We will explore the Indmoney pages to determine whether the data is SSR (Server-Side Rendered) or CSR (Client-Side). Based on this, we'll use `requests` + `BeautifulSoup` if static, or `Playwright`/`Selenium` if dynamic.
+- **Data Points to Extract:** Scheme Name, Category, Returns (1Y, 3Y, 5Y), NAV (Net Asset Value), Expense Ratio, AMC (Asset Management Company), etc.
+- **Preprocessing:** Clean the extracted text and output structured formats (JSON/CSV) for indexing.
+
+### Phase 2: Vector Database & Indexing
+The structured mutual fund data will be transformed into vector embeddings.
+- **Chunking Strategy:** Convert structured rows into textual documents.
+- **Embedding Model:** Transform text chunks into high-dimensional vectors.
+- **Vector Store:** Store embeddings and metadata in a Vector Database (e.g., **ChromaDB**, **Qdrant**, or **FAISS**). Optionally support upserts (updating existing schemes).
+
+### Phase 3: Retrieval Pipeline
+- **Vector Search:** Embed the user query and retrieve the `Top-K` closest chunks.
+- **Metadata Filtering:** Allow filtering by Category before performing the semantic search based on query intent.
+
+### Phase 4: Generation Pipeline (LLM Integration)
+- **Context Injection:** Feed retrieved Top-K chunks + User Query to an LLM.
+- **System Prompt:** Ensure the chatbot acts as a financial assistant, strictly basing answers on the provided context to prevent hallucinations.
+- **LLM Selection:** OpenAI GPT, Anthropic Claude, or Google Gemini.
+
+### Phase 5: Backend Application (API)
+- **Framework:** Build robust API backend using **FastAPI** (Python) or **Node.js/Express**.
+- **Endpoints:** Provide a `/chat` endpoint that takes the user's message and returns the LLM response.
+- **Session & Memory:** Implement conversation history (e.g., storing past messages in memory or Redis) so the bot can answer follow-up questions contextually.
+- **Orchestration:** Combine the Retrieval (Phase 3) and Generation (Phase 4) components here.
+
+### Phase 6: Frontend Application (UI)
+- **Framework:** Develop a modern, responsive user interface using a web framework like **React**, **Next.js**, or even a quick prototype with **Streamlit**.
+- **Design:** Build a clean chat UI with message bubbles, typing indicators, and formatted responses.
+- **Integration:** Hook up the frontend interface to the backend API endpoints.
+
+### Phase 7: Automated Update Scheduler
+To ensure the chatbot always serves the latest market data without manual intervention.
+- **Task Scheduling:** Implement a scheduler using a tool like **Cron**, **Celery Beat**, or **APScheduler**.
+- **Execution Pipeline:** 
+  1. Trigger Phase 1 (Data Acquisition) to pull the latest NAVs and returns.
+  2. Trigger Phase 2 (Indexing) to update the Vector Database with new information, ensuring we update existing records rather than duplicating them.
+- **Monitoring:** Add logging to track the success or failure of the scheduled runs.
+
+### Phase 8: Evaluation & Refinement
+- **Testing:** Run evaluation queries end-to-end to gauge accuracy and response time.
+- **Tuning:** Tune chunk sizes, retrieval `K`, system prompts, and polling intervals based on results.
+
+---
+
+## Phase 1 Implementation Plan
+Once approved, we will:
+1. Fetch the main `indmoney.com/mutual-funds` page structure.
+2. Analyze the network requests and DOM.
+3. Write a Python scraper to collect a sample list of schemes and extract their details.
+4. Save the sample data to a local `csv` or `json` file to prepare for Phase 2.

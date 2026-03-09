@@ -1,0 +1,17 @@
+
+======================
+QUERY: What is the phone number of the CEO?
+ANSWER:
+I cannot provide the phone number of the CEO. If you'd like to know more about the mutual funds, I can help with that.
+
+======================
+QUERY: Which fund has exactly a 3 year lock in?
+ANSWER:
+Based on the information provided in Result 3, the Sbi Elss Tax Saver Fund Direct Growth 2754 has a lock-in period of 3 years.
+
+Source URL: https://www.indmoney.com/mutual-funds/sbi-elss-tax-saver-fund-direct-growth-2754
+
+======================
+QUERY: Who won the world cup in 2022?
+ANSWER:
+I'm happy to help you with mutual fund-related questions, but I don't have enough information to answer that. The question about the 2022 World Cup winner is out of scope for this chatbot, as it's not related to mutual funds. I'm here to assist you with mutual fund information, so please feel free to ask any questions you have about mutual funds.

@@ -1,0 +1,27 @@
+
+Starting Integration Tests...
+--------------------------------------------------
+Test 1: HDFC Flexi Cap Exit Load
+Query: What is the exit load of HDFC flexi cap fund ?
+LLM Answer:
+The exit load of HDFC Flexi Cap Fund Direct Plan Growth Option 3184 is 1.0%. 
+
+Source URL: https://www.indmoney.com/mutual-funds/hdfc-flexi-cap-fund-direct-plan-growth-option-3184
+Status: [PASS] ✅
+--------------------------------------------------
+Test 2: SBI ELSS Minimum SIP
+Query: What is the minimum SIP for SBI ELSS Tax Saver Fund?
+LLM Answer:
+The minimum SIP amount for SBI ELSS Tax Saver Fund Direct Growth 2754 is ₹500. 
+
+Source URL: https://www.indmoney.com/mutual-funds/sbi-elss-tax-saver-fund-direct-growth-2754
+Status: [PASS] ✅
+--------------------------------------------------
+Test 3: Out of Scope Guardrail
+Query: What is the capital of France?
+LLM Answer:
+I'm happy to help you with mutual fund-related questions. However, the capital of France is out of the scope of this conversation. I'm a mutual fund advisor, and I don't have information about geographical locations or unrelated topics. If you'd like to ask about mutual funds, I'd be happy to assist you.
+Status: [PASS] ✅
+--------------------------------------------------
+
+Integration Test Summary: 3/3 Passed
