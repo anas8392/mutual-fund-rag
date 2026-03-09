@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loadingBubble.style.opacity = "0.7";
 
         try {
-            // Target the FastAPI endpoint running on defaults
-            const response = await fetch("http://localhost:8000/api/chat", {
+            // Target the FastAPI endpoint using a relative path so it resolves properly cross-device or on deployment
+            const response = await fetch("/api/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
